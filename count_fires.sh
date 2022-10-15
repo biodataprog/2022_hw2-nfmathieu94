@@ -12,14 +12,13 @@ MINYEAR=1900
 MAXYEAR=1901
 
 echo -n | cut -d , -f2 calfires.csv | sort -n
-nano calfires.csv #deleted row data that was interfering with alignment
+
 
 # write code to set these variables with the smallest and largest years
 
-MINYEAR=$(cut -d , -f2 calfire.csv | sort -n | head -n 2)
-MAXYEAR=$(cut -d , -f2 calfire.csv | sort -n | tail -n 1)
-echo "This report has the years: $MINYEAR-$MAXYEAR"
-# if you have problems the CSV file already part of this repository so you can use 'calfires_2021.csv'
+MINYEAR=$(cut -d , -f2 calfires.csv | sort -n | tail -n +2 | head -n 1)
+MAXYEAR=$(cut -d , -f2 calfires.csv | sort -n | tail -n 1)
+echo "This report has the years: $MINYEAR-$MAXYEAR" # if you have problems the CSV file already part of this repository so you can use 'calfires_2021.csv'
 
 # print out the total number of fires (remember to remove the header line)
 TOTALFILECOUNT=0
@@ -34,13 +33,13 @@ echo "Total number of files: $TOTALFILECOUNT"
 
 # print out the number of fire in each year
 
-$FIRES_EACH_YEAR=(cut -d , -f2 calfires.csv | sort -n | tail -n +2 | uniq -c)
+FIRES_EACH_YEAR=$(cut -d , -f2 calfires.csv | sort -n | tail -n +2 | uniq -c)
 
-echo "Number of fires in each year follows: $FIRES_EACH_YEAR"
+echo "Number of fires in each year follows: $FIRES_EACH_YEAR "
 
 
 # print out the name of the largest file use the GIS_ACRES and report the number of acres
-LARGEST=$(awk -F, '{print $13","$6} calfires.csv | sort -n | tail -n 1 | cut -d , -f2)
+LARGEST=$(cut -d , -f6,13 calfires.csv | sort -t',' -k2,2n | cut -d , -f1 | tail -n 1)
 LARGESTACRES=$(cut -d , -f13 calfires.csv | sort -n | tail -n 1)
 echo "Largest fire was $LARGEST and burned $LARGESTACRES"
 
